@@ -17,7 +17,7 @@
     #quiz-container {
       background: #fff8e6;
       border-radius: 18px;
-      box-shadow: 0 3px 24px #c4a2a2/0.24;
+      box-shadow: 0 3px 24px rgba(196, 162, 162, 0.24);
       width: 100%;
       max-width: 420px;
       padding: 32px 24px;
@@ -117,7 +117,7 @@
       },
       {
         q: "Was trinken PL und JK am liebsten im Sommer?",
-        a: ["ice coffe", "ice kaffee", "icecoffe", "icecoffee", "icecoffee"],
+        a: ["ice coffe", "ice kaffee", "icecoffe", "icecoffee"],
       },
       {
         q: "Was machen wir am liebsten zum chillen...?",
@@ -163,7 +163,13 @@
           <br>
           <button onclick="checkAnswer()">Antwort prüfen</button>
         `;
-        document.getElementById('answerInput').focus();
+        const answerInput = document.getElementById('answerInput');
+        answerInput.focus();
+        answerInput.onkeydown = function(e) {
+          if (e.key === "Enter") {
+            checkAnswer();
+          }
+        };
       } else {
         quizDiv.innerHTML = '';
         showResult();
