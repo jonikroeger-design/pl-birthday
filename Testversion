@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Paulis Birthday Quizz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Verdana, sans-serif;
+      background: linear-gradient(120deg, #fae7fa, #ffecc4);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #quiz-container {
+      background: #fff8e6;
+      border-radius: 18px;
+      box-shadow: 0 3px 24px #c4a2a2/0.24;
+      width: 100%;
+      max-width: 420px;
+      padding: 32px 24px;
+      margin: 16px;
+      text-align: center;
+      border: 2px solid #f4c9ff;
+    }
+    h1 {
+      color: #ff7eaf;
+      margin-bottom: 28px;
+      letter-spacing: 1.5px;
+      font-size: 2.1em;
+    }
+    .question {
+      font-size: 1.19em;
+      margin-bottom: 22px;
+      color: #68317b;
+      min-height: 58px;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      font-size: 1.1em;
+      width: 70%;
+      padding: 10px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      border: 1.5px solid #dbbfff;
+      outline: none;
+      transition: border .2s;
+    }
+    input[type="text"]:focus {
+      border-color: #ff7eaf;
+      background: #fff3ff;
+    }
+    button {
+      background: #ff7eaf;
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 1px 8px #ff7eaf78;
+      transition: background .2s;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      background: #e8659d;
+    }
+    .feedback {
+      min-height:24px;
+      margin: 8px 0 12px 0;
+      font-size:1em;
+      color: #e8659d;
+      font-weight: bold;
+    }
+    #result {
+      margin-top: 36px;
+    }
+    #result img {
+      border-radius: 20px;
+      max-width: 90%;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px #ff7eaf55;
+    }
+    #result .msg {
+      font-size: 1.12em;
+      color: #68317b;
+      margin-bottom:12px;
+      font-weight: bold;
+    }
+    #result .amsterdam {
+      background: #fffce5;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 1.07em;
+      color: #5b2466;
+      border: 1.5px dashed #ff7eaf;
+    }
+    @media(max-width:440px) {
+      #quiz-container { padding: 12px 2vw; }
+    }
+  </style>
+</head>
+<body>
+  <div id="quiz-container">
+    <h1>Paulis Birthday Quizz</h1>
+    <div id="quiz"></div>
+    <div class="feedback" id="feedback"></div>
+    <div id="result"></div>
+  </div>
+  <script>
+    const quiz = [
+      {
+        q: "Wo gehen Queens am liebsten auf Toilette?",
+        a: ["hochbett", "hochbete", "hochbet"],
+      },
+      {
+        q: "Was trinken PL und JK am liebsten im Sommer?",
+        a: ["ice coffe", "ice kaffee", "icecoffe", "icecoffee", "icecoffee"],
+      },
+      {
+        q: "Was machen wir am liebsten zum chillen...?",
+        a: ["grillen, kasten killen", "grillen kasten killen", "grillen kasten", "kasten killen", "grillen"],
+      },
+      {
+        q: "Was war Jonis erster Spitzname für PL?",
+        a: ["fritate"],
+      },
+      {
+        q: "Wie hieß der Dönerladen, bei dem wir uns vor dem Barca Spiel einen Döner geholt haben?",
+        a: ["mustafas gemüsekebap", "mustafas", "gemüsekebap"],
+      },
+      {
+        q: "Wo musste Möppie immer einen Helm tragen?",
+        a: ["im spieleparadies", "spieleparadies"],
+      },
+      {
+        q: "Wen wirft Pauli immer auf den Boden?",
+        a: ["den knochen", "knochen"],
+      },
+      {
+        q: "Im Sommer ist Pauli immer ein kleiner...?",
+        a: ["blacki"],
+      },
+      {
+        q: "Wo drin transportiert Möppie: Feuerzeug, Bierflasche, Drehzeug, Nagellack, kleines pinkes Handy und Knuspersticks auf einem Mal?",
+        a: ["in ihrer bauchtasche", "bauchtasche"],
+      },
+    ];
+    let idx = 0;
+
+    const quizDiv = document.getElementById('quiz');
+    const feedbackDiv = document.getElementById('feedback');
+    const resultDiv = document.getElementById('result');
+
+    function showQuestion() {
+      feedbackDiv.textContent = '';
+      if (idx < quiz.length) {
+        quizDiv.innerHTML = `
+          <div class="question">${quiz[idx].q}</div>
+          <input type="text" id="answerInput" autocomplete="off" />
+          <br>
+          <button onclick="checkAnswer()">Antwort prüfen</button>
+        `;
+        document.getElementById('answerInput').focus();
+      } else {
+        quizDiv.innerHTML = '';
+        showResult();
+      }
+    }
+
+    window.checkAnswer = function () {
+      const inp = document.getElementById('answerInput');
+      const ansRaw = inp.value.trim().toLowerCase().replace(/ü/g,"u").replace(/ä/g,"a").replace(/ö/g,"o");
+      const correctAnswers = quiz[idx].a.map(a => a.toLowerCase().replace(/ü/g,"u").replace(/ä/g,"a").replace(/ö/g,"o"));
+      if (correctAnswers.some(a =>
+          ansRaw.replace(/\s+/g, ' ') === a.replace(/\s+/g, ' ') ||
+          ansRaw.replace(/\,/g, ',').replace(/[\.\!\?]/g,'') === a.replace(/\,/g, ',').replace(/[\.\!\?]/g,'')
+      )) {
+        feedbackDiv.textContent = "Richtig! 🎉";
+        idx++;
+        setTimeout(showQuestion, 800);
+      } else {
+        feedbackDiv.textContent = "Leider falsch. Versuch es nochmal!";
+        inp.value = '';
+        inp.focus();
+      }
+    }
+
+    function showResult() {
+      resultDiv.innerHTML = `
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Amsterdam" />
+        <div class="msg">🎂 Herzlichen Glückwunsch, Pauli! 🎂</div>
+        <div class="amsterdam">
+          Liebe Pauli, ich wünsche dir alles Liebe und Gute zu deinem Geburtstag!<br>
+          Ich würde dich gerne in der Zeit vom <b>30.03.26 bis zum 02.04.2026</b> ein paar Tage nach <b>Amsterdam</b> einladen.<br>
+          Hotel ist schon gebucht!<br><br>
+          Hab dich ganz doll lieb,<br>
+          <b>dein Joni</b>
+        </div>
+      `;
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
